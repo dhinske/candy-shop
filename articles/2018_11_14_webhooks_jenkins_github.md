@@ -2,7 +2,9 @@
 
 source: https://devopscube.com/jenkins-build-trigger-github-pull-request/
 
-tags: jenkins, github
+date: 2018-11-12
+
+tags: jenkins, github, webhooks
 
 It is better have an automated build process that kicks of the CI/CD pipeline on a pull request rather than manually triggering the jobs.
 
