@@ -31,3 +31,23 @@ Provide links...
   - Smallest and simplest Kubernetes object
   - Represents a single instance of the application
   - Logical collection of one or more containers, which run on the same host, share the same network namespace and mount the same external volumes
+- Labels
+  - Key-Value pairs that can be attached to any Kubernetes objects
+- Label Selectors
+  - With Label Selectors, we can select a subset of objects
+  - Two types of selectors
+   - Equality-Based Selectors: allow filtering of objects based on Label keys and values (=, ==, or !=)
+   - Set-Based Selectors: filtering of objects based on a set of values (in, notin, and exist)
+- ReplicationController
+  - Part of the master node's controller manager
+  - Makes sure the specified number of replicas for a Pod is running at any given point in time
+  - Always use controllers like ReplicationController to create and manage Pods
+- ReplicaSets
+  - next-generation ReplicationController with one difference: ReplicaSets support both equality- and set-based selectors, whereas ReplicationControllers only support equality-based Selectors
+- Deployments
+  - Provide declarative updates to Pods and ReplicaSets
+  - DeploymentController is part of the master node's controller manager
+  - Deployments provide features like Deployment recording, with which, if something goes wrong, we can rollback to a previously known state
+- Namespaces
+  - If we have numerous users whom we would like to organize into teams/projects, we can partition the Kubernetes cluster into sub-clusters using Namespaces
+  - Two default Namespaces: kube-system and default
