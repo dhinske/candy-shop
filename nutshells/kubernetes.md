@@ -51,3 +51,13 @@ Provide links...
 - Namespaces
   - If we have numerous users whom we would like to organize into teams/projects, we can partition the Kubernetes cluster into sub-clusters using Namespaces
   - Two default Namespaces: kube-system and default
+
+## Authentication
+- Every access on the API-Server goes through three stages
+  - Authentication
+    - Two kind of user: normal users (managed outside) and service accounts (usually created automatically)
+    - Different modules for Authentication, like Client Certificates, Token, Password File and more
+  - Authorization
+    - Similar to the Authentication step, Authorization has multiple modules/authorizers, checked in sequence
+  - Admission Control
+    - Used to specify granular access control policies, which include allowing privileged containers, checking on resource quota, etc
