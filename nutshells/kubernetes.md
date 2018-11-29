@@ -89,3 +89,30 @@ spec:
   - Kubernetes has two ways to discover Services
     - Environment variables: As soon as the Pod starts on any worker node, the kubelet daemon running on that node adds a set of environment variables in the Pod for all active Services
     - DNS: Kubernetes has an add-on for DNS, which creates a DNS record for each Service and its format is like my-svc.my-namespace.svc.cluster.local. Services within the same Namespace can reach to other Services with just their name
+- ServiceType
+  - Defines access scope of a Service
+  - ClusterIP: default, Virtual IP address using the ClusterIP
+  - NodePort: In addition to creating a ClusterIP, a port from the range 30000-32767 is mapped to the respective Service, from all the worker nodes. The NodePort ServiceType is useful when we want to make our Services accessible from the external world. The end-user connects to the worker nodes on the specified port, which forwards the traffic to the applications running inside the cluster. To access the application from the external world, administrators can configure a reverse proxy outside the Kubernetes cluster and map the specific endpoint to the respective port on the worker nodes.
+  - LoadBalancer:
+    - NodePort and ClusterIP Services are automatically created, and the external load balancer will route to them
+    - The Services are exposed at a static port on each worker node
+    - The Service is exposed externally using the underlying cloud provider's load balancer feature.
+  - ExternalIP: A Service can be mapped to an ExternalIP address if it can route to one or more of the worker nodes. Traffic that is ingressed into the cluster with the ExternalIP (as destination IP) on the Service port, gets routed to one of the the Service endpoints. ExternalIPs are not managed by Kubernetes. The cluster administrators has configured the routing to map the ExternalIP address to one of the nodes.
+  - ExternalName: Has no Selectors and does not define any endpoints. When accessed within the cluster, it returns a CNAME record of an externally configured Service. The primary use case of this ServiceType is to make externally configured Services like my-database.example.com available inside the cluster, using just the name, like my-database, to other Services inside the same Namespace.
+
+## Volumes
+- Directory backed by a storage medium. The storage medium and its content are determined by the Volume Type
+- A Volume is attached to a Pod and shared among the containers of that Pod
+- The Volume has the same life span as the Pod, and it outlives the containers of the Pod - this allows data to be preserved across container restarts
+- VolumeTypes
+  - emptyDir: An empty Volume is created for the Pod as soon as it is scheduled on the worker node. The Volume's life is tightly coupled with the Pod. If the Pod dies, the content of emptyDir is deleted forever.
+  - hostPath: With the hostPath Volume Type, we can share a directory from the host to the Pod. If the Pod dies, the content of the Volume is still available on the host.
+  - gcePersistentDisk: Mount a Google Compute Engine (GCE) persistent disk into a Pod
+  - awsElasticBlockStore: Mount an AWS EBS Volume into a Pod
+  - nfs: Mount an NFS share into a Pod
+  - iscsi: Mount iSCSI share into a Pod
+  - secret: Pass sensitive information to Pods
+  - persistentVolumeClaim:
+    - Attach a PersistentVolume to a Pod
+    - APIs for users and administrators to manage and consume storage
+    - A PersistentVolumeClaim (PVC) is a request for storage by a user. Users request for PersistentVolume resources based on size, access modes, etc. Once a suitable PersistentVolume is found, it is bound to a PersistentVolumeClaim.
