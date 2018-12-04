@@ -2,6 +2,7 @@
 
 ## Introduction
 - Kubernetes is an open-source system for automating deployment, scaling, and management of containerized applications
+- Written in GO, collection of API-oriented, very fast binaries
 - Features: self-healing, horizontal scaling, service discovery, load balancing, automatd rollouts/rollbacks, secret and configuration management, storage orchestration
 - Kubernetes has two typed of nodes
   - Master nodes
@@ -30,7 +31,7 @@ Provide links...
 - Pods
   - Smallest and simplest Kubernetes object
   - Represents a single instance of the application
-  - Logical collection of one or more containers, which run on the same host, share the same network namespace and mount the same external volumes
+  - Logical collection of one or more containers, which run on the same host, share the same network namespace (and IP) and mount the same external volumes
 - Labels
   - Key-Value pairs that can be attached to any Kubernetes objects
 - Label Selectors
@@ -47,7 +48,7 @@ Provide links...
 - Deployments
   - Provide declarative updates to Pods and ReplicaSets
   - DeploymentController is part of the master node's controller manager
-  - Deployments provide features like Deployment recording, with which, if something goes wrong, we can rollback to a previously known state
+  - Deployments have two strategies: Replacement (downtime) and RollingUpdate (no downtime)
 - Namespaces
   - If we have numerous users whom we would like to organize into teams/projects, we can partition the Kubernetes cluster into sub-clusters using Namespaces
   - Two default Namespaces: kube-system and default
