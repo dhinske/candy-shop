@@ -4,7 +4,7 @@ source: https://blog.gruntwork.io/5-lessons-learned-from-writing-over-300-000-li
 
 date: 2018-11-21
 
-tags: infrastructure as code
+tags: infrastructure as code, checklist
 
 ## Lesson 1: The Production-Grade Infrastructure Checklist
 - Building production-grade infrastructure is hard. And stressful. And time consuming. Very time consuming.
