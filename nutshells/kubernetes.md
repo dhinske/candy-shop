@@ -4,7 +4,9 @@
 - Kubernetes is an open-source system for automating deployment, scaling, and management of containerized applications
 - Written in GO, collection of API-oriented, very fast binaries
 - Features: self-healing, horizontal scaling, service discovery, load balancing, automatd rollouts/rollbacks, secret and configuration management, storage orchestration
+- Check Clusterstatus: ```kubectl clusterinfo```
 - Kubernetes has two typed of nodes
+  - Check node status: ```kubectl get nodes```
   - Master nodes
     - Responsible for managing the Kubernetes cluster
     - There can be more than one master node in the cluster.
@@ -21,6 +23,9 @@
       - Container runtime: Run and manage a container's lifecycle (Docker is a platform which uses containerd as a container runtime)
       - kubelet: Agent which runs on each worker node and communicates with the master node
       - kube-proxy: Network proxy which runs on each worker node and listens to the API server for each Service endpoint creation/deletion
+    - Worker can have labels (key-value pair)
+        - ```kubectl label nodes <node-name> <label-key>=<label-value>```
+        - Pods can influence with Label Selectors on which nodes they will end up running
 
 
 ## Installation
@@ -28,10 +33,26 @@ Provide links...
 
 ## Kubernetes Object Model
 - Kubernetes has a very rich object model, with which it represents different persistent entities in the Kubernetes cluster.
+- Objects are usually described in YAML
+- Objects are created via ```kubectl create -f {yaml-file}```
 - Pods
   - Smallest and simplest Kubernetes object
   - Represents a single instance of the application
   - Logical collection of one or more containers, which run on the same host, share the same network namespace (and IP) and mount the same external volumes
+  ```
+      apiVersion: v1    
+      kind: Pod             # Type of object
+      metadata:
+        name: nginx
+        labels:             # Optional Label
+          env: test
+      spec:                 # Container definition: Use image 'nginx'
+        containers:
+        - name: nginx
+          image: nginx
+        nodeSelector:       # Optional: Only deploy on node with label disktype=ssd
+          disktype: ssd
+  ```
 - Labels
   - Key-Value pairs that can be attached to any Kubernetes objects
 - Label Selectors
@@ -52,6 +73,30 @@ Provide links...
 - Namespaces
   - If we have numerous users whom we would like to organize into teams/projects, we can partition the Kubernetes cluster into sub-clusters using Namespaces
   - Two default Namespaces: kube-system and default
+- DaemonSet
+  -  Ensures that all (or some) Nodes run a copy of a Pod.
+  ```
+    apiVersion: apps/v1
+    kind: DaemonSet
+    metadata:
+      ...
+    spec:
+      selector:
+        matchLabels:
+          name: fluentd-elasticsearch
+      template:
+        metadata:
+          labels:
+            name: fluentd-elasticsearch
+        spec:
+          tolerations:                              # Dont run on master nodes
+          - key: node-role.kubernetes.io/master
+            effect: NoSchedule
+          containers:
+          - name: fluentd-elasticsearch
+            image: k8s.gcr.io/fluentd-elasticsearch:1.20
+          terminationGracePeriodSeconds: 30
+  ```
 
 ## Authentication
 - Every access on the API-Server goes through three stages
@@ -117,6 +162,6 @@ spec:
     - Attach a PersistentVolume to a Pod
     - APIs for users and administrators to manage and consume storage
     - A PersistentVolumeClaim (PVC) is a request for storage by a user. Users request for PersistentVolume resources based on size, access modes, etc. Once a suitable PersistentVolume is found, it is bound to a PersistentVolumeClaim.
-    - Once a user finishes its work, the attached PersistentVolumes can be released. The underlying PersistentVolumes can then be reclaimed and recycled for future usage. 
+    - Once a user finishes its work, the attached PersistentVolumes can be released. The underlying PersistentVolumes can then be reclaimed and recycled for future usage.
 
 ## Example: Deploying Applications
