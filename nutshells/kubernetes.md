@@ -116,3 +116,6 @@ spec:
     - Attach a PersistentVolume to a Pod
     - APIs for users and administrators to manage and consume storage
     - A PersistentVolumeClaim (PVC) is a request for storage by a user. Users request for PersistentVolume resources based on size, access modes, etc. Once a suitable PersistentVolume is found, it is bound to a PersistentVolumeClaim.
+    - Once a user finishes its work, the attached PersistentVolumes can be released. The underlying PersistentVolumes can then be reclaimed and recycled for future usage. 
+
+## Example: Deploying Applications
