@@ -34,7 +34,10 @@ Provide links...
 ## Kubernetes Object Model
 - Kubernetes has a very rich object model, with which it represents different persistent entities in the Kubernetes cluster.
 - Objects are usually described in YAML
-- Objects are created via ```kubectl create -f {yaml-file}```
+- Objects in YAML-files are instanciated via ```kubectl create -f {yaml-file}```
+- kubectl also offers cli-commands to start deployments and services ``` kubectl run --image=nginx nginx-app --port=80 ```
+- Objects of a cluster can be retrieved via ``` kubectl get [pods|deployments|services...] ```
+- Objects can be described in more detail via ``` kubectl describe [object-type] {object-name} ```
 - Pods
   - Smallest and simplest Kubernetes object
   - Represents a single instance of the application
@@ -54,12 +57,17 @@ Provide links...
           disktype: ssd
   ```
 - Labels
-  - Key-Value pairs that can be attached to any Kubernetes objects
+  - Key-Value pairs that can be attached to any Kubernetes objects such as Pods and ReplicaSets
+  - Attach label on object creation via command-line: ``` kubectl run --image=nginx nginx-app --port=80 --labels="ver=2, app=webserver"```
+  - Apply labels on an object after creation: ``` kubectl label [object-type] {object-name} "key=value" ```
 - Label Selectors
   - With Label Selectors, we can select a subset of objects
   - Two types of selectors
    - Equality-Based Selectors: allow filtering of objects based on Label keys and values (=, ==, or !=)
+     - Return all pods with label "ver=2": ``` kubectl get pods --selector="ver=2" ```
    - Set-Based Selectors: filtering of objects based on a set of values (in, notin, and exist)
+     - Return all pods with label "ver=2": ``` kubectl get pods --selector="app in (staging,production)" ```
+  - Get all deployments that have a label "version": ``` kubectl get deployments --selector="version" ```
 - ReplicationController
   - Part of the master node's controller manager
   - Makes sure the specified number of replicas for a Pod is running at any given point in time
@@ -89,7 +97,7 @@ Provide links...
           labels:
             name: fluentd-elasticsearch
         spec:
-          tolerations:                              # Dont run on master nodes
+          tolerations:                              # Optional: Dont run on specific nodes
           - key: node-role.kubernetes.io/master
             effect: NoSchedule
           containers:
